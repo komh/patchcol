@@ -1,0 +1,54 @@
+diff -uNr  base/src/dev/kbd/kbdbase/kbdxlat.asm.org base/src/dev/kbd/kbdbase/kbdxlat.asm
+--- base/src/dev/kbd/kbdbase/kbdxlat.asm.org	2001-07-26 11:52:26.000000000 +0900
++++ base/src/dev/kbd/kbdbase/kbdxlat.asm	2004-02-13 13:47:54.000000000 +0900
+@@ -4143,6 +4143,49 @@
+ 
+   And [DI].XlateFlags,Not E1Prefix         ; Clear indicator.
+   And [DI].XKeyFlags, Not SecPrefix
++
++ifdef DBCSKBD
++
++ifdef KLFX103
++  Mov BL, Byte Ptr [SI].KPacketLen+1
++  .If < BL eq 72h > OR
++  .If < BL eq 70h > OR
++  .If < BL eq 71h >
++      OR Byte Ptr [SI].KPacketLen+1, 0F0h
++  .Endif
++
++  Mov BX, [SI].DDFlags
++  And BX, UndefKey
++  .If < BX eq UndefKey >
++      Mov BL, [SI].Key.Scan
++      .If < BL eq 5Bh > OR
++      .If < BL eq 5Ch > OR
++      .If < BL eq 5Dh >
++         And [SI].DDFlags, not UndefKey
++         Mov [SI].Key.Status, 66
++        ;Mov [SI].Key.DShift, 0
++         Mov [SI].Key.Shift, 0
++        ;Add [SI].Key.Scan, 91h
++         Mov [SI].Key.Scan, 0
++         Mov [SI].Key.XChar, 0
++
++         .If < BL eq 5Bh >
++                Mov Byte Ptr [SI].KPacketLen+1, 7Eh
++         .Endif
++
++         .If < BL eq 5Ch >
++                Mov Byte Ptr [SI].KPacketLen+1, 7Fh
++         .Endif
++
++         .If < BL eq 5Dh >
++                Mov Byte Ptr [SI].KPacketLen+1, 7Ch
++         .Endif
++      .Endif
++  .Endif
++endif ;KLFX103
++
++endif ;DBCSKBD
++
+   Pop BX                                   ; Fix stack.
+   Mov AL, Byte Ptr [SI].KPacketLen+1       ; Restore scan code in AL.
+   Sti                                      ; Restore ints disabled by PhysToVirt.
+ 
