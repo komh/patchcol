@@ -1,0 +1,48 @@
+diff -uNr  base/inc/kbdxlat.inc.org base/inc/kbdxlat.inc
+--- base/inc/kbdxlat.inc.org	1996-06-13 23:58:24.000000000 +0900
++++ base/inc/kbdxlat.inc	2003-02-04 04:09:32.000000000 +0900
+@@ -10,6 +10,8 @@
+ 
+ AT            Equ    00h ; AT Keyboard
+ EN            Equ    01h ; ENhanced Keyboard
++DA            Equ    05h
++DG            Equ    06h
+ 
+ ;******************************************************************
+ ;*                                                                 *
+@@ -43,7 +45,7 @@
+   XTLength      dw  ?   ;Length of table in bytes.
+   XTEntryCount  dw  127 ;Number of scan codes (= keydef entries).
+   XTEntryWidth  dw  7   ;Width of each entry.
+-  XTCountry     dw  'US' ;@@ Language this table represents.
++  XTCountry     dw  'KR' ;@@ Language this table represents.
+   XTTableID     dw  1   ;@@ DCR031/PTM1730, added for use by Winthorne.
+   XTSubCountry  db  '    '   ;&& DCR #17 Add kbd kayout ID
+   XTRes         dw  8  dup(?)   ;&& RESERVED words (changed from 11, see
+diff -uNr  base/src/dev/kbd/kbdbase/kbdsubs.asm.org base/src/dev/kbd/kbdbase/kbdsubs.asm
+--- base/src/dev/kbd/kbdbase/kbdsubs.asm.org	2001-07-26 11:52:06.000000000 +0900
++++ base/src/dev/kbd/kbdbase/kbdsubs.asm	2003-08-04 15:53:04.000000000 +0900
+@@ -3003,7 +3003,7 @@
+  IFDEF   KLFX103                ;@IBM K-YW111896 PMWIN(input.c) uses this Keyboard ID
+     Mov KeyboardID1, '1'        ;Set ID as 'ENH'                        ;@IBM J-DCR287(A)
+     Mov KeyboardID2, '0'                                                ;@IBM J-DCR287(A)
+-    Mov KeyboardID3, '1'                                                ;@IBM J-DCR287(A)
++    Mov KeyboardID3, '3'                                                ;@IBM J-DCR287(A)
+     Mov KeyboardType, EN        ;PS/2 Enhanced keyboard                 ;@IBM J-DCR287(A)
+     Ret                                                                 ;@IBM J-DCR287(A)
+  ELSE                                                                   ;@IBM K-YW111896
+diff -uNr  base/src/dev/kbd/kbdbase/makefile.org base/src/dev/kbd/kbdbase/makefile
+--- base/src/dev/kbd/kbdbase/makefile.org	1996-09-03 12:30:52.000000000 +0900
++++ base/src/dev/kbd/kbdbase/makefile	2003-08-04 15:44:56.000000000 +0900
+@@ -63,9 +63,9 @@
+ #
+ 
+ !ifndef smp
+-AFLAGS= -Mx -t
++AFLAGS= -Mx -t -DDBCSKBD -DKLFX103
+ !else
+-AFLAGS= -Mx -t -DSMP
++AFLAGS= -Mx -t -DSMP -DDBCSKBD -DKLFX103
+ !endif
+ 
+ 
