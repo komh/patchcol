@@ -1,0 +1,441 @@
+diff -uNr  base/h/devhelp.h.org base/h/devhelp.h
+--- base/h/devhelp.h.org	1997-03-18 03:25:26.000000000 +0900
++++ base/h/devhelp.h	2006-12-17 20:47:58.000000000 +0900
+@@ -26,7 +26,7 @@
+ extern PFN Device_Help;
+
+ #define DEVHELP_CALL \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "sub  ax,ax" \
+    "error:" \
+@@ -52,7 +52,7 @@
+    "movzx   eax,ax" \
+    "mov  ebx,-1" \
+    "mov  dl,63h" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "pop  bx" \
+    "jc   error" \
+    "mov  es:[bx],eax" \
+@@ -76,7 +76,7 @@
+ #pragma aux DevHelp_AllocPhys = \
+    "xchg ax,bx" \
+    "mov  dl,18h" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "mov  es:[di],bx" \
+    "mov  es:[di+2],ax" \
+@@ -92,7 +92,7 @@
+ USHORT DevHelp_AllocReqPacket(USHORT WaitFlag, PBYTE __far *ReqPktAddr);
+ #pragma aux DevHelp_AllocReqPacket = \
+    "mov  dl,0Dh", \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "push es" \
+    "push bx" \
+@@ -127,7 +127,7 @@
+ USHORT DevHelp_AttachDD(NPSZ DDName, NPBYTE DDTable);
+ #pragma aux DevHelp_AttachDD = \
+    "mov  dl,2Ah" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "mov  ax,0" \
+    "sbb  ax,0" \
+    value [ax] \
+@@ -153,7 +153,7 @@
+ USHORT DevHelp_DeRegister(USHORT MonitorPID, USHORT MonitorHandle, PUSHORT MonitorsLeft);
+ #pragma aux DevHelp_DeRegister = \
+    "mov  dl,21h" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "mov  es:[di],ax" \
+    "sub  ax,ax" \
+@@ -179,7 +179,7 @@
+ #pragma aux DevHelp_DynamicAPI = \
+    "mov  dl,6Ch" \
+    "xchg ax,bx" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "mov  es:[si],di" \
+    "sub  ax,ax" \
+@@ -191,7 +191,7 @@
+ USHORT DevHelp_EOI(USHORT IRQLevel);
+ #pragma aux DevHelp_EOI = \
+    "mov  dl,31h" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "sub  ax,ax" \
+    value [ax] \
+    parm caller nomemory [al] \
+@@ -224,7 +224,7 @@
+ #pragma aux DevHelp_FreePhys = \
+    "xchg ax,bx" \
+    "mov  dl,19h" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "mov  ax,0" \
+    "sbb  ax,0" \
+    value [ax] \
+@@ -234,7 +234,7 @@
+ USHORT DevHelp_FreeReqPacket(PBYTE ReqPktAddr);
+ #pragma aux DevHelp_FreeReqPacket = \
+    "mov  dl,0Eh", \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "sub  ax,ax" \
+    value [ax] \
+    parm caller [es bx] \
+@@ -258,7 +258,7 @@
+ USHORT DevHelp_GetDescInfo(SEL Selector, PBYTE SelInfo);
+ #pragma aux DevHelp_GetDescInfo = \
+    "mov  dl,5Dh" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "mov  es:[bx],ax" \
+    "mov  es:[bx+2],ecx" \
+@@ -272,7 +272,7 @@
+ USHORT DevHelp_GetDeviceBlock(USHORT Lid, PPVOID DeviceBlockPtr);
+ #pragma aux DevHelp_GetDeviceBlock = \
+    "mov  dl,38h" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "mov  es:[si],dx" \
+    "mov  es:[si+2],cx" \
+@@ -297,7 +297,7 @@
+ USHORT DevHelp_GetDOSVar(USHORT VarNumber, USHORT VarMember, PPVOID KernalVar);
+ #pragma aux DevHelp_GetDOSVar = \
+    "mov  dl,24h" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "mov  es:[di],bx" \
+    "mov  es:[di+2],ax" \
+    "sub  ax,ax" \
+@@ -308,7 +308,7 @@
+ USHORT DevHelp_GetLIDEntry(USHORT DeviceType, SHORT LIDIndex, USHORT Type, PUSHORT LID);
+ #pragma aux DevHelp_GetLIDEntry = \
+    "mov  dl,34h" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "mov  es:[di],ax" \
+    "sub  ax,ax" \
+@@ -324,7 +324,7 @@
+    "pop  ds" \
+    "pop  es" \
+    "mov  dl,2Bh" \
+-   "jmp far es:[Device_Help]" \
++   "jmp dword ptr es:[Device_Help]" \
+    parm [es si] [di] \
+    modify nomemory exact [];
+
+@@ -334,7 +334,7 @@
+    "mov  dl,5Ch" \
+    "mov  ecx,ss:[bx+4]" \
+    "mov  ebx,ss:[bx]" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "sub  ax,ax" \
+    "error:" \
+@@ -350,7 +350,7 @@
+ USHORT DevHelp_Lock(SEL Segment, USHORT LockType, USHORT WaitFlag, PULONG LockHandle);
+ #pragma aux DevHelp_Lock = \
+    "mov  dl,13h" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "mov  es:[di],bx" \
+    "mov  es:[di+2],ax" \
+@@ -370,7 +370,7 @@
+ USHORT DevHelp_MonitorCreate(USHORT MonitorHandle, PBYTE FinalBuffer, NPFN NotifyRtn, PUSHORT MonitorChainHandle);
+ #pragma aux DevHelp_MonitorCreate = \
+    "mov  dl,1Fh" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "mov  si,[esp]" \
+    "mov  es,[esp+2]" \
+@@ -419,7 +419,7 @@
+    "mov  dh,[esp+4]" \
+    "mov  edi,[esp+6]" \
+    "mov  dl,60h" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "sub  ax,ax" \
+    "error:" \
+@@ -432,7 +432,7 @@
+    "mov  ecx,[esp]" \
+    "mov  edi,[esp+4]" \
+    "mov  dl,5Fh" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "les  di,[esp+8]" \
+    "mov  es:[di],eax" \
+@@ -456,7 +456,7 @@
+    "mov  ecx,[bp+6]" \
+    "mov  si,[bp+10]" \
+    "mov  dh,[bp+12]" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "sub  ax,ax" \
+    "error:" \
+@@ -484,7 +484,7 @@
+ #pragma aux DevHelp_PhysToUVirt = \
+    "xchg ax,bx" \
+    "mov  dl,17h" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "push es" \
+    "push bx" \
+@@ -503,7 +503,7 @@
+    "xchg ax,bx" \
+    "mov  dx,15h" \
+    "push ds" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "sub  ax,ax" \
+    "mov  es:[di],si" \
+@@ -533,7 +533,7 @@
+    "mov  dl,4" \
+    "xchg ax,bx" \
+    "xchg cx,di" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "mov  ax,0"       /* doesn't affect zero flag like sub ax,ax does */ \
+    "error:" \
+@@ -545,7 +545,7 @@
+ #pragma aux DevHelp_ProcRun = \
+    "mov  dl,5" \
+    "xchg ax,bx" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "mov  es:[si],ax" \
+    "sub  ax,ax" \
+    value [ax] \
+@@ -563,7 +563,7 @@
+ #pragma aux DevHelp_PullRequest = \
+    "push es" \
+    "mov  dl,0Ah" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "movzx   esp,sp" \
+    "push es" \
+@@ -581,7 +581,7 @@
+ USHORT DevHelp_PushRequest(NPBYTE Queue, PBYTE ReqPktddr);
+ #pragma aux DevHelp_PushRequest = \
+    "mov  dl,09h" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "sub  ax,ax" \
+    value [ax] \
+    parm [si] [es bx] \
+@@ -590,7 +590,7 @@
+ USHORT DevHelp_QueueFlush(NPBYTE Queue);
+ #pragma aux DevHelp_QueueFlush = \
+    "mov  dl,10h" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "sub  ax,ax" \
+    value [ax] \
+    parm [bx] \
+@@ -606,7 +606,7 @@
+ USHORT DevHelp_QueueInit(NPBYTE Queue);
+ #pragma aux DevHelp_QueueInit = \
+    "mov  dl,0Fh" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "sub  ax,ax" \
+    value [ax] \
+    parm [bx] \
+@@ -615,7 +615,7 @@
+ USHORT DevHelp_QueueRead(NPBYTE Queue, PBYTE Char);
+ #pragma aux DevHelp_QueueRead = \
+    "mov  dl,12h" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "mov  es:[di],al" \
+    "sub  ax,ax" \
+@@ -638,7 +638,7 @@
+    "pop  ds" \
+    "pop  es" \
+    "mov  dl,28h" \
+-   "call far es:[Device_Help]" \
++   "call dword ptr es:[Device_Help]" \
+    "push es" \
+    "pop  ds" \
+    "mov  ax,0" \
+@@ -660,7 +660,7 @@
+ USHORT DevHelp_RegisterBeep(PFN BeepHandler);
+ #pragma aux DevHelp_RegisterBeep = \
+    "mov  dl,51h" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "sub  ax,ax" \
+    value [ax] \
+    parm caller nomemory [cx di] \
+@@ -673,7 +673,7 @@
+ #pragma aux DevHelp_RegisterDeviceClass = \
+    "mov  dl,43h" \
+    "xchg ax,bx" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "les  bx,[esp]" \
+    "mov  es:[bx],ax" \
+@@ -703,7 +703,7 @@
+ USHORT DevHelp_RegisterStackUsage(PVOID StackUsageData);
+ #pragma aux DevHelp_RegisterStackUsage = \
+    "mov  dl,3Ah" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "mov  ax,0" \
+    "sbb  ax,0" \
+    value [ax] \
+@@ -713,7 +713,7 @@
+ USHORT DevHelp_RegisterTmrDD(NPFN TimerEntry, PULONG TmrRollover, PULONG Tmr);
+ #pragma aux DevHelp_RegisterTmrDD = \
+    "mov  dl,61h" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "mov  ax,bx" \
+    "les  bx,[esp]" \
+    "mov  es:[bx],ax" \
+@@ -759,7 +759,7 @@
+ USHORT DevHelp_SchedClock(PFN NEAR *SchedRoutineAddr);
+ #pragma aux DevHelp_SchedClock = \
+    "mov  dl,0h" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "sub  ax,ax" \
+    value [ax] \
+    parm caller [ax] \
+@@ -780,7 +780,7 @@
+ #pragma aux DevHelp_SemHandle = \
+    "xchg ax,bx" \
+    "mov  dl,8h" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "mov  es:[si],bx" \
+    "mov  es:[si+2],ax" \
+@@ -811,7 +811,7 @@
+ USHORT DevHelp_SendEvent(USHORT EventType, USHORT Parm);
+ #pragma aux DevHelp_SendEvent = \
+    "mov  dl,25h" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "mov  ax,0" \
+    "sbb  ax,0" \
+    value [ax] \
+@@ -835,7 +835,7 @@
+ USHORT DevHelp_SortRequest(NPBYTE Queue, PBYTE ReqPktAddr);
+ #pragma aux DevHelp_SortRequest = \
+    "mov  dl,0Ch" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "sub  ax,ax" \
+    value [ax] \
+    parm [si] [es bx] \
+@@ -844,7 +844,7 @@
+ USHORT DevHelp_TCYield(void);
+ #pragma aux DevHelp_TCYield = \
+    "mov  dl,3" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "sub  ax,ax" \
+    value [ax] \
+    parm caller nomemory [] \
+@@ -888,7 +888,7 @@
+ USHORT DevHelp_VideoPause(USHORT OnOff);
+ #pragma aux DevHelp_VideoPause = \
+    "mov  dl,3Ch" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "mov  ax,0" \
+    "sbb  ax,0" \
+    value [ax] \
+@@ -900,7 +900,7 @@
+    "movzx   esp,sp" \
+    "mov  esi,[esp]" \
+    "mov  dl,5bh" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "les  bx,[esp+4]" \
+    "mov  es:[bx],eax" \
+@@ -919,7 +919,7 @@
+    "mov  es,si" \
+    "mov  ds,bx" \
+    "mov  si,ax" \
+-   "call far es:[Device_Help]" \
++   "call dword ptr es:[Device_Help]" \
+    "pop  es" \
+    "mov  es:[di],bx" \
+    "mov  es:[di+2],ax" \
+@@ -946,7 +946,7 @@
+    "mov  ecx,[esp+4]" \
+    "mov  edi,[esp+8]" \
+    "mov  dl,57h" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "les  di,[esp+12]" \
+    "mov  es:[di],eax" \
+@@ -978,7 +978,7 @@
+    "mov  eax,[esp]" \
+    "mov  ebx,[esp+4]" \
+    "mov  ecx,[esp+8]" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "les  bx,[esp+12]" \
+    "mov  es:[bx],eax" \
+@@ -1003,7 +1003,7 @@
+    "mov  ecx,[esp+8]" \
+    "mov  edi,[esp+12]" \
+    "mov  esi,[esp+16]" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "les  bx,[esp+20]" \
+    "mov  es:[bx],eax" \
+@@ -1017,12 +1017,12 @@
+ #define VMDHPG_WRITE            0x0001                               /*@V76282*/
+
+ USHORT DevHelp_VMProcessToGlobal(ULONG Flags, LIN LinearAddr, ULONG Length, PLIN GlobalLinearAddr);
+-#pragma aux DevHelp_ProcessToGlobal = \
++#pragma aux DevHelp_VMProcessToGlobal = \
+    "mov  dl,59h" \
+    "mov  eax,[esp]" \
+    "mov  ebx,[esp+4]" \
+    "mov  ecx,[esp+8]" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "jc   error" \
+    "les  bx,[esp+12]" \
+    "mov  es:[bx],eax" \
+@@ -1057,7 +1057,7 @@
+ USHORT DevHelp_Yield(void);
+ #pragma aux DevHelp_Yield = \
+    "mov  dl,2" \
+-   "call far [Device_Help]" \
++   "call dword ptr [Device_Help]" \
+    "sub  ax,ax" \
+    value [ax] \
+    parm caller nomemory [] \
