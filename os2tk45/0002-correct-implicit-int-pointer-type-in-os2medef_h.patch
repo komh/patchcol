@@ -1,0 +1,14 @@
+diff -uNr  h/os2medef.h.org h/os2medef.h
+--- h/os2medef.h.org	2001-04-09 08:04:00.000000000 +0000
++++ h/os2medef.h	2024-09-27 14:57:34.000000000 +0000
+@@ -32,8 +32,8 @@
+ 
+ typedef WORD  VERSION;
+ typedef char FAR * LPSTR;
+-typedef FAR * LPTR;
+-typedef FAR * LPRECT;
++typedef VOID FAR * LPTR;
++typedef RECTL FAR * LPRECT;
+ typedef HWND HANDLE;
+ typedef WORD *  PW;
+ typedef WORD *  PAW;
