@@ -1,0 +1,12 @@
+diff -uNr  386/endian.h.org 386/endian.h
+--- 386/endian.h.org	2024-08-04 05:21:22.000000000 +0000
++++ 386/endian.h	2023-10-16 19:49:00.000000000 +0000
+@@ -144,7 +144,7 @@
+  * Not sure how correct this is now. And mixing 4 versions
+  * of (Free)BSD doesn't help....
+  */
+-#ifndef _POSIX_SOURCE
++#if !defined(_POSIX_SOURCE) || defined(__USE_EMX)
+ 
+ #ifndef _KERNEL
+ #include <sys/cdefs.h>
