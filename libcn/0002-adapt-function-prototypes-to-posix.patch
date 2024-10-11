@@ -1,0 +1,39 @@
+diff -uNr  stdlib.h.org stdlib.h
+--- stdlib.h.org	2024-08-04 05:21:18.000000000 +0000
++++ stdlib.h	2024-10-11 23:39:04.000000000 +0000
+@@ -187,7 +187,7 @@
+ /* char	*gcvt(double, int, int * __restrict, int * __restrict); */
+ int	 getsubopt(char **, char *const *, char **);
+ /** @todo int	 grantpt(int); */
+-char	*initstate(unsigned long /* XSI requires u_int */, char *, long);
++char	*initstate(unsigned, char *, size_t);
+ long	 jrand48(unsigned short[3]);
+ /* char	*l64a(long); */
+ void	 lcong48(unsigned short[7]);
+@@ -204,7 +204,7 @@
+ long	 nrand48(unsigned short[3]);
+ /** @todo int	 posix_openpt(int); */
+ /** @todo char	*ptsname(int); */
+-int	 putenv(const char *);
++int	 putenv(char *);
+ long	 random(void);
+ char	*realpath(const char *, char resolved_path[]);
+ unsigned short
+@@ -215,7 +215,7 @@
+ #endif
+ char	*setstate(/* const */ char *);
+ void	 srand48(long);
+-void	 srandom(unsigned long);
++void	 srandom(unsigned);
+ /** @todo int	 unlockpt(int); */
+ #endif /* __XSI_VISIBLE */
+ 
+@@ -411,7 +411,7 @@
+ int _getpagesize (void);
+ char *_getwd (char *);
+ int _mkdir (const char *, long);
+-int _putenv (const char *);
++int _putenv (char *);
+ int _rmdir (const char *);
+ void *_sbrk(intptr_t);
+ unsigned _sleep (unsigned);
