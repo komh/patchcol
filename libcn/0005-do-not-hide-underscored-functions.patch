@@ -1,0 +1,12 @@
+diff -uNr  unistd.h.org unistd.h
+--- unistd.h.org	2024-08-04 05:21:18.000000000 +0000
++++ unistd.h	2025-02-10 20:10:50.000000000 +0000
+@@ -600,7 +600,7 @@
+ char    *_getpass2(const char *, int);
+ #endif
+ 
+-#if !defined(_POSIX_SOURCE) || defined(_WITH_UNDERSCORE)
++#if !defined(_POSIX_SOURCE) || defined(_WITH_UNDERSCORE) || defined(__USE_EMX)
+ /** @todo update this section to match the one without underscores as far as needed! */
+ void     __exit(int) __dead2;
+ int      _access(const char *, int);
