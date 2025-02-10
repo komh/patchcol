@@ -1,0 +1,21 @@
+diff -uNr  unistd.h.org unistd.h
+--- unistd.h.org	2024-08-04 05:21:18.000000000 +0000
++++ unistd.h	2025-02-10 20:10:50.000000000 +0000
+@@ -676,7 +676,7 @@
+ #include <sys/cdefs.h>
+ #include <sys/types.h>
+ int     TCPCALL     soclose(int);
+-#ifndef _POSIX_SOURCE
++#if !defined(_POSIX_SOURCE) || defined(__USE_EMX)
+ int     TCPCALL     gethostid(void);
+ int     TCPCALL     gethostname(char *, int);
+ #ifndef TCPV40HDRS
+@@ -686,7 +686,7 @@
+ int     TCPCALL     ruserok(const char *, int, const char *, const char *);
+ #include <sys/select.h>
+ #endif /* !TCP40HDRS */
+-#endif /* !_POSIX_SOURCE */
++#endif /* !_POSIX_SOURCE || __USE_EMX */
+ 
+ #ifdef __USE_GNU
+ 
